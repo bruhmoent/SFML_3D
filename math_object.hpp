@@ -21,8 +21,8 @@ struct Point2D {
 
 struct Vertex
 {
-	Point3D position();
-	Point3D normal();
+    Point3D position();
+    Point3D normal();
 };
 
 #ifndef MATH_OBJECT_HPP
@@ -59,7 +59,7 @@ public:
 
     void calculate_center();
 
-	void load_from_file(const std::string& path, float scale);
+    void load_from_file(const std::string& path, float scale);
 
     template<typename T, typename... Args>
     void add_points(T arg, Args... args)
