@@ -1,7 +1,10 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include <cmath>
+#include <SFML/Window/VideoMode.hpp>
 #include <iostream>
+#include <fstream>  
+#include <sstream>
 
 struct Point3D {
     float x;
@@ -14,6 +17,12 @@ struct Point2D {
     float x;
     float y;
     Point2D(float x, float y) : x(x), y(y) {}
+};
+
+struct Vertex
+{
+	Point3D position();
+	Point3D normal();
 };
 
 #ifndef MATH_OBJECT_HPP
@@ -49,6 +58,8 @@ public:
     void set_offset(Point3D offset);
 
     void calculate_center();
+
+	void load_from_file(const std::string& path, float scale);
 
     template<typename T, typename... Args>
     void add_points(T arg, Args... args)
