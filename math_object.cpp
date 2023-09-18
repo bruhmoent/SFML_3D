@@ -14,6 +14,75 @@ void MathObject::calculate_center() {
     m_center.z = sum_z / m_points.size();
 }
 
+void MathObject::load_from_file(const std::string& path, float scale)
+{
+	m_points.clear();
+	m_faces.clear();  // Clear existing face data.
+
+	std::vector<Vertex> vertices;
+
+	std::stringstream ss;
+	std::ifstream obj_file(path);
+	std::string line;
+	std::string prefix;
+
+	if (!obj_file.is_open())
+	{
+		throw "FATAL: Failed to open file.\n";
+	}
+
+	while (std::getline(obj_file, line))
+	{
+		ss.clear();
+		ss.str(line);
+		ss >> prefix;
+
+		if (prefix == "v")
+		{
+			Point3D tmp_point3d(0.f, 0.f, 0.f);
+			ss >> tmp_point3d.x >> tmp_point3d.y >> tmp_point3d.z;
+			tmp_point3d.x *= scale;
+			tmp_point3d.y *= scale;
+			tmp_point3d.z *= scale;
+			m_points.push_back(tmp_point3d);
+		}
+		else if (prefix == "f")
+		{
+			std::vector<size_t> face_indices;
+			size_t tmp_index;
+			while (ss >> tmp_index)
+			{
+				// Adjust to 0-based index by subtracting 1.
+				face_indices.push_back(tmp_index - 1);
+
+				// Ignore characters until space or newline is encountered.
+				while (ss.peek() != ' ' && ss.peek() != '\n' && ss.peek() != EOF)
+					ss.ignore();
+			}
+
+			// Ensure the number of face indices is valid.
+			if (face_indices.size() >= 3)
+			{
+				// Add face indices in triplets.
+				for (size_t i = 0; i < face_indices.size(); i += 3)
+				{
+					if (i + 2 < face_indices.size())
+					{
+						add_faces(face_indices[i], face_indices[i + 1], face_indices[i + 2]);
+					}
+				}
+			}
+			else
+			{
+				std::cerr << "Error: Invalid number of face indices. Each face must have at least 3 vertices.\n";
+			}
+		}
+	}
+
+	obj_file.close();  // Close the file when done reading.
+}
+
+
 MathObject::MathObject(Point3D offset) : m_offset(offset)
 {
     m_projection = {
