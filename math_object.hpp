@@ -6,14 +6,16 @@
 #include <fstream>  
 #include <sstream>
 
-struct Point3D {
+struct Point3D 
+{
     float x;
     float y;
     float z;
     Point3D(float x, float y, float z) : x(x), y(y), z(z) {}
 };
 
-struct Point2D {
+struct Point2D 
+{
     float x;
     float y;
     Point2D(float x, float y) : x(x), y(y) {}
@@ -22,7 +24,6 @@ struct Point2D {
 struct Vertex
 {
     Point3D position();
-    Point3D normal();
 };
 
 #ifndef MATH_OBJECT_HPP
@@ -45,8 +46,6 @@ public:
 
     void connect_face(const std::vector<size_t>& face_points, const std::vector<std::vector<float>>& rotation_matrix);
 
-    void connect_points(int index1, int index2, const std::vector<std::vector<float>>& rotation_matrix);
-
     void rotate_around_origin(float angle_x, float angle_y, float angle_z);
 
     void set_angle_x(float x);
@@ -56,6 +55,8 @@ public:
     void set_angle_z(float z);
 
     void set_offset(Point3D offset);
+
+    void set_projection_matrix(const std::vector<std::vector<float>>& matrix);
 
     void calculate_center();
 
@@ -78,8 +79,10 @@ public:
 
 private:
     std::vector<Point3D> m_points;
+
     Point3D m_offset = Point3D(0.f, 0.f, 0.f);
     Point3D m_center = Point3D(0.f, 0.f, 0.f);
+
     sf::VertexArray m_lines{ sf::Lines };
 
     float m_angle_x = 0.f;
