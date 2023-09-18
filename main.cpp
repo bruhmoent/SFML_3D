@@ -42,6 +42,8 @@ int main()
         point_indices[15], point_indices[16], point_indices[17]
     );
 
+	m->load_from_file("oc.obj", 50.f);
+
 	Point3D p2 = Point3D(100, 200, 0.f);
 	m->set_offset(p2);
 	m->calculate_center();
